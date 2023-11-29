@@ -15,7 +15,7 @@ aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames
 # Enable DNS hostnames for the created VPC using modify-vpc-attribute.
 aws ec2 modify-vpc-attribute --vpc-id vpc-03563314f821becda --enable-dns-hostnames
 ```
-Link (./aws-commands-used/create_vpc)
+[Link](./aws-commands-used/create_vpc)
 [Watch Demo Video]()
 
 ## Subnetting
@@ -36,7 +36,8 @@ aws ec2 create-subnet --vpc-id $vpc_id --cidr-block 10.0.1.0/24 --availability-z
 aws ec2 create-subnet --vpc-id $vpc_id --cidr-block 10.0.2.0/24 --availability-zone ap-southeast-2b
 
 ```
-link (./create_subnet)
+[link](./aws-commands-used/create_subnet)
+
 [Watch Demo Video](youtube video link)
 
 ## Internet Gateway
@@ -66,7 +67,8 @@ echo $route_table_id
 # Create a default route in the route table, directing traffic to the internet via the specified internet gateway.
 aws ec2 create-route --destination-cidr-block 0.0.0.0/0 --gateway-id $internet_gateway_id --route-table-id $route_table_id
 ```
-link (create_route)
+[link](./aws-commands-used/create_route)
+
 [Watch Demo Video](youtube video link)
 
 ### Subnet Association
@@ -80,7 +82,8 @@ for subnet in ${subnets[@]}; do
     aws ec2 associate-route-table --route-table-id $route_table_id --subnet-id $subnet
 done
 ```
-link (associate_subnet)
+[link](./aws-commands-used/associate_subnet)
+
 [Watch Demo Video](youtube video link)
 
 ## Security Group
@@ -104,7 +107,7 @@ aws ec2 authorize-security-group-ingress --group-id $group_id --protocol tcp --p
 # Describe the details of the created security group.
 aws ec2 describe-security-groups --group-ids $group_id
 ```
-link (security_group)
+[link](./aws-commands-used/security_group)
 [Watch Demo Video](youtube video link)
 
 ## Elastic File System (EFS)
@@ -125,7 +128,8 @@ for subnet in ${subnets[@]}; do
     aws efs create-mount-target --security-groups $group_id --file-system-id $file_system_id --subnet-id $subnet
 done
 ```
-link (create_file_system)
+[link](./aws-commands-used/create_file_system)
+
 [Watch Demo Video](youtube video link)
 
 ## Launch EC2 Instances
