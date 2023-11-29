@@ -17,7 +17,7 @@ aws ec2 modify-vpc-attribute --vpc-id vpc-03563314f821becda --enable-dns-hostnam
 ```
 [Link](./aws-commands-used/create_vpc)
 
-[Watch Demo Video]()
+[Watch Demo](https://youtu.be/lE_TtPICQZQ)
 
 ## Subnetting
 ```bash
@@ -39,7 +39,7 @@ aws ec2 create-subnet --vpc-id $vpc_id --cidr-block 10.0.2.0/24 --availability-z
 ```
 [link](./aws-commands-used/create_subnet)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/JTFDARPN52A)
 
 ## Internet Gateway
 ```bash
@@ -55,7 +55,7 @@ aws ec2 attach-internet-gateway --internet-gateway-id igw-09a1c97a1e97d1631 --vp
 ```
 [link](./aws-commands-used/create_internet_gateway)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/0kOLLlbW5B8)
 
 ## Routing
 ```bash
@@ -72,7 +72,7 @@ aws ec2 create-route --destination-cidr-block 0.0.0.0/0 --gateway-id $internet_g
 ```
 [link](./aws-commands-used/create_route)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/YRSXGfnwZ0k)
 
 ### Subnet Association
 ```bash
@@ -87,7 +87,7 @@ done
 ```
 [link](./aws-commands-used/associate_subnet)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/8Kg-WCCRJk0)
 
 ## Security Group
 ```bash
@@ -112,7 +112,7 @@ aws ec2 describe-security-groups --group-ids $group_id
 ```
 [link](./aws-commands-used/security_group)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/BIOtx9AgfB0)
 
 ## Elastic File System (EFS)
 ```bash
@@ -134,7 +134,7 @@ done
 ```
 [link](./aws-commands-used/create_file_system)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/fC7qMkRCvcE)
 
 ## Launch EC2 Instances
 ```bash
@@ -150,7 +150,7 @@ aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro 
 ```
 [link](./aws-commands-used/run_instances)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo](https://youtu.be/3PEDBqGmD9M)
 
 ## Mounting step by step
 ```bash
@@ -171,7 +171,7 @@ df -h
 ```
 [link](./aws-commands-used/mount_manually)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo]()
 
 ## Script Writing that will automate mounting processs
 [link](./nfs_configurator)
