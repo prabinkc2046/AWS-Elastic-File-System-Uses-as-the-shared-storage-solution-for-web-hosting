@@ -174,6 +174,8 @@ df -h
 [Watch Demo Video](youtube video link)
 
 ## Script Writing that will automate mounting processs
+[link](./nfs_configurator)
+
 [Watch Demo Video](youtube video link)
 
 ## Mounting  with Script
