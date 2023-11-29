@@ -16,6 +16,7 @@ aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames
 aws ec2 modify-vpc-attribute --vpc-id vpc-03563314f821becda --enable-dns-hostnames
 ```
 [Link](./aws-commands-used/create_vpc)
+
 [Watch Demo Video]()
 
 ## Subnetting
@@ -52,6 +53,8 @@ echo vpc-03563314f821becda
 # Attach the created internet gateway to the specified VPC (vpc-03563314f821becda).
 aws ec2 attach-internet-gateway --internet-gateway-id igw-09a1c97a1e97d1631 --vpc-id vpc-03563314f821becda
 ```
+[link](./aws-commands-used/create_internet_gateway)
+
 [Watch Demo Video](youtube video link)
 
 ## Routing
@@ -108,6 +111,7 @@ aws ec2 authorize-security-group-ingress --group-id $group_id --protocol tcp --p
 aws ec2 describe-security-groups --group-ids $group_id
 ```
 [link](./aws-commands-used/security_group)
+
 [Watch Demo Video](youtube video link)
 
 ## Elastic File System (EFS)
@@ -144,7 +148,7 @@ aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro 
 # Launch another EC2 instance (webserver2) with similar configurations but a different name tag.
 aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro --security-group-ids $group_id --associate-public-ip-address --key-name mykeypair --tag-specifications 'ResourceType=instance,Tags=[{Key=name,Value=webserver2}]' --subnet-id $(aws ec2 describe-subnets --filters "Name=tag:name,Values=publicsn1" --query Subnets[0].SubnetId --output text) --count 1
 ```
-link (run_instances)
+[link](./aws-commands-used/run_instances)
 
 [Watch Demo Video](youtube video link)
 
@@ -165,7 +169,8 @@ mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
 # Display the mounted filesystem.
 df -h
 ```
-link (mount_manually)
+[link](./aws-commands-used/mount_manually)
+
 [Watch Demo Video](youtube video link)
 
 ## Script Writing that will automate mounting processs
