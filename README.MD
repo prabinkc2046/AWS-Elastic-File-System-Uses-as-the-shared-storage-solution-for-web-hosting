@@ -6,24 +6,37 @@ In this guide, I will be using Elastic File System to provide a shared storage s
 ```bash
 # Create a new VPC with CIDR block 10.0.0.0/16 in the ap-southeast-2 region, and tag it with the name 'MyVPC'.
 # Store the resulting VPC ID in the variable vpc_id and print it.
-vpc_id=vpc-0f85577acc349c818
-echo vpc-03563314f821becda
+vpc_id=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --region ap-southeast-2 --tag-specifications 'ResourceType=vpc,Tags=[{Key=name,Value=MyVPC}]' --query Vpc.VpcId --output text)
+echo $vpc_id
+
+# Enable DNS hostnames for the created VPC using modify-vpc-attribute.
+aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames
 
 # Enable DNS hostnames for the created VPC using modify-vpc-attribute.
 aws ec2 modify-vpc-attribute --vpc-id vpc-03563314f821becda --enable-dns-hostnames
 ```
-
-[Watch Demo Video](yo)
+Link (./aws-commands-used/create_vpc)
+[Watch Demo Video]()
 
 ## Subnetting
 ```bash
-# Print the VPC ID stored in the variable vpc_id
-echo vpc-03563314f821becda
+# Create a new VPC with CIDR block 10.0.0.0/16 in the ap-southeast-2 region, and tag it with the name 'MyVPC'.
+# Store the resulting VPC ID in the variable vpc_id and print it.
+vpc_id=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --region ap-southeast-2 --tag-specifications 'ResourceType=vpc,Tags=[{Key=name,Value=MyVPC}]' --query Vpc.VpcId --output text)
+echo $vpc_id
 
-# Create subnets in the specified VPC (vpc-03563314f821becda) with CIDR blocks and availability zones.
-aws ec2 create-subnet --vpc-id vpc-03563314f821becda --cidr-block 10.0.1.0/24 --availability-zone ap-southeast-2a
-aws ec2 create-subnet --vpc-id vpc-03563314f821becda --cidr-block 10.0.2.0/24 --availability-zone ap-southeast-2b
+# Enable DNS hostnames for the created VPC using modify-vpc-attribute.
+aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames
+$ cat create_subnet 
+# Print the VPC ID stored in the variable vpc_id
+echo $vpc_id
+
+# Create subnets in the specified VPC ($vpc_id) with CIDR blocks and availability zones.
+aws ec2 create-subnet --vpc-id $vpc_id --cidr-block 10.0.1.0/24 --availability-zone ap-southeast-2a
+aws ec2 create-subnet --vpc-id $vpc_id --cidr-block 10.0.2.0/24 --availability-zone ap-southeast-2b
+
 ```
+link (./create_subnet)
 [Watch Demo Video](youtube video link)
 
 ## Internet Gateway
@@ -42,30 +55,32 @@ aws ec2 attach-internet-gateway --internet-gateway-id igw-09a1c97a1e97d1631 --vp
 
 ## Routing
 ```bash
-# Create a route table in the specified VPC (vpc-03563314f821becda) and store the resulting ID in the variable route_table_id.
-route_table_id=
-echo rtb-0aa4d8123f119f69c
+# Create a route table in the specified VPC ($vpc_id) and store the resulting ID in the variable route_table_id.
+route_table_id=$(aws ec2 create-route-table --vpc-id $vpc_id --query RouteTable.RouteTableId --output text)
+echo $route_table_id
 
 # Print the internet gateway ID and the route table ID.
-echo igw-09a1c97a1e97d1631
-echo rtb-0aa4d8123f119f69c
+echo $internet_gateway_id
+echo $route_table_id
 
 # Create a default route in the route table, directing traffic to the internet via the specified internet gateway.
-aws ec2 create-route --destination-cidr-block 0.0.0.0/0 --gateway-id igw-09a1c97a1e97d1631 --route-table-id rtb-0aa4d8123f119f69c
+aws ec2 create-route --destination-cidr-block 0.0.0.0/0 --gateway-id $internet_gateway_id --route-table-id $route_table_id
 ```
+link (create_route)
 [Watch Demo Video](youtube video link)
 
 ### Subnet Association
 ```bash
 # Retrieve a list of subnet IDs in the ap-southeast-2 region and store them in the variable subnets.
-subnets=
-echo 
+subnets=$(aws ec2 describe-subnets --region ap-southeast-2 --query Subnets[*].SubnetId --output text)
+echo $subnets
 
-# Iterate through each subnet and associate the previously created route table (rtb-0aa4d8123f119f69c) with it.
-for subnet in ; do
-    aws ec2 associate-route-table --route-table-id rtb-0aa4d8123f119f69c --subnet-id 
+# Iterate through each subnet and associate the previously created route table ($route_table_id) with it.
+for subnet in ${subnets[@]}; do
+    aws ec2 associate-route-table --route-table-id $route_table_id --subnet-id $subnet
 done
 ```
+link (associate_subnet)
 [Watch Demo Video](youtube video link)
 
 ## Security Group
@@ -89,6 +104,7 @@ aws ec2 authorize-security-group-ingress --group-id $group_id --protocol tcp --p
 # Describe the details of the created security group.
 aws ec2 describe-security-groups --group-ids $group_id
 ```
+link (security_group)
 [Watch Demo Video](youtube video link)
 
 ## Elastic File System (EFS)
@@ -109,6 +125,7 @@ for subnet in ${subnets[@]}; do
     aws efs create-mount-target --security-groups $group_id --file-system-id $file_system_id --subnet-id $subnet
 done
 ```
+link (create_file_system)
 [Watch Demo Video](youtube video link)
 
 ## Launch EC2 Instances
@@ -123,6 +140,8 @@ aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro 
 # Launch another EC2 instance (webserver2) with similar configurations but a different name tag.
 aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro --security-group-ids $group_id --associate-public-ip-address --key-name mykeypair --tag-specifications 'ResourceType=instance,Tags=[{Key=name,Value=webserver2}]' --subnet-id $(aws ec2 describe-subnets --filters "Name=tag:name,Values=publicsn1" --query Subnets[0].SubnetId --output text) --count 1
 ```
+link (run_instances)
+
 [Watch Demo Video](youtube video link)
 
 ## Mounting step by step
@@ -142,6 +161,7 @@ mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2
 # Display the mounted filesystem.
 df -h
 ```
+link (mount_manually)
 [Watch Demo Video](youtube video link)
 
 ## Script Writing that will automate mounting processs

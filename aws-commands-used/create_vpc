@@ -1,0 +1,7 @@
+# Create a new VPC with CIDR block 10.0.0.0/16 in the ap-southeast-2 region, and tag it with the name 'MyVPC'.
+# Store the resulting VPC ID in the variable vpc_id and print it.
+vpc_id=$(aws ec2 create-vpc --cidr-block 10.0.0.0/16 --region ap-southeast-2 --tag-specifications 'ResourceType=vpc,Tags=[{Key=name,Value=MyVPC}]' --query Vpc.VpcId --output text)
+echo $vpc_id
+
+# Enable DNS hostnames for the created VPC using modify-vpc-attribute.
+aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames

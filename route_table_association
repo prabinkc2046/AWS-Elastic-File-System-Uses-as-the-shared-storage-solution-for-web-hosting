@@ -1,9 +1,0 @@
-# Retrieve a list of subnet IDs in the ap-southeast-2 region and store them in the variable subnets.
-subnets=
-echo 
-
-# Iterate through each subnet and associate the previously created route table (rtb-0aa4d8123f119f69c) with it.
-for subnet in ; do
-    aws ec2 associate-route-table --route-table-id rtb-0aa4d8123f119f69c --subnet-id 
-done
-

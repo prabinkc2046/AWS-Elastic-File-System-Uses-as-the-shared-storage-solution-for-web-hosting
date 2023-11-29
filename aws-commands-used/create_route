@@ -1,0 +1,10 @@
+# Create a route table in the specified VPC ($vpc_id) and store the resulting ID in the variable route_table_id.
+route_table_id=$(aws ec2 create-route-table --vpc-id $vpc_id --query RouteTable.RouteTableId --output text)
+echo $route_table_id
+
+# Print the internet gateway ID and the route table ID.
+echo $internet_gateway_id
+echo $route_table_id
+
+# Create a default route in the route table, directing traffic to the internet via the specified internet gateway.
+aws ec2 create-route --destination-cidr-block 0.0.0.0/0 --gateway-id $internet_gateway_id --route-table-id $route_table_id

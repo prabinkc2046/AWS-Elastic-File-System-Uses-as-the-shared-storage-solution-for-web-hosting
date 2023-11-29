@@ -1,7 +1,0 @@
-# Print the VPC ID stored in the variable vpc_id
-echo vpc-03563314f821becda
-
-# Create subnets in the specified VPC (vpc-03563314f821becda) with CIDR blocks and availability zones.
-aws ec2 create-subnet --vpc-id vpc-03563314f821becda --cidr-block 10.0.1.0/24 --availability-zone ap-southeast-2a
-aws ec2 create-subnet --vpc-id vpc-03563314f821becda --cidr-block 10.0.2.0/24 --availability-zone ap-southeast-2b
-

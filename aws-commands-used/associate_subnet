@@ -1,0 +1,8 @@
+# Retrieve a list of subnet IDs in the ap-southeast-2 region and store them in the variable subnets.
+subnets=$(aws ec2 describe-subnets --region ap-southeast-2 --query Subnets[*].SubnetId --output text)
+echo $subnets
+
+# Iterate through each subnet and associate the previously created route table ($route_table_id) with it.
+for subnet in ${subnets[@]}; do
+    aws ec2 associate-route-table --route-table-id $route_table_id --subnet-id $subnet
+done
