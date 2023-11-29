@@ -1,0 +1,117 @@
+#!/bin/bash
+
+# this script  takes the dns name with root directory path as the first arguement and mounting point as the second argument
+dns_name_with_root_directory_path=$1
+mounting_point=$2
+
+# this function will check if the require arguements are provided or not
+
+# this function checks if the provided mount point exists
+check_mountingpoint_exists(){
+	if [ -d "$mounting_point" ]; then
+		echo "mount point $mounting_point exists. Using it..."
+	else
+		echo "mount point $mounting_point does not exists. Please create one"
+		exit
+	fi
+}
+# this function checks if the provided mounting point actually exits
+check_mountingpoint_exists
+
+
+# Check which distribution it is and make that global variable to be reached by other function
+#setting distro as the global variable that will be accessible by other functions in the script
+distro=""
+detect_distro(){
+	source /etc/os-release
+	if [ -n "$ID" ]; then
+		# converting the distro value to lower case for comparision 
+		distro=$(echo "$ID" | tr '[:upper:]' '[:lower:]')
+	else
+		echo "Distro could not be detected"
+	fi
+}
+
+#UPdate the system
+# update the system based on detected distor
+# exit and does not update if the detected distro is not in the option
+update_it(){
+	case $distro in 
+		"ubuntu"|"debian")
+    		apt update -y >> /dev/null
+			;;
+		"fedora"|"centos"|"amzn")
+    		dnf update -y >> /dev/null
+			;;
+			*)
+    		echo "$distro can not be updated. exiting.."
+    		exit
+			;;
+	esac
+}
+
+
+# Check if nfs client is installed based on the detected system and install it if not installed
+install_nfs_client(){
+case $distro in 
+"ubuntu"|"debian")
+    #checking if nfs-client "nfs-common" is installed
+    # use awk to grab the second field  of output of dpkg -l to select only pakcage name and not get confused
+    if dpkg -l | awk '{print $2}' | grep "nfs-common"; then 
+        echo "nfs-client  is installed. Going to mount now.." 
+    else 
+        echo "nfs-client  is not installed. So, Installing it now.." 
+            apt install -y nfs-common >> /dev/null 
+    fi 
+;;
+"fedora"|"centos"|"amzn")
+    if rpm -q --quiet "nfs-utils"; then 
+        echo "nfs-client  is installed. Going to mount now.."
+    else 
+        echo "nfs-client is not installed. So, Installing it now.." 
+            dnf install -y nfs-utils >> /dev/null 
+    fi 
+
+;;
+*)
+    echo "$distro is unknown. Exiting."
+    exit
+;;
+esac
+}
+
+# This function checks the exit status of the previously issued command and take appropriate action
+check_exit_status(){
+exit_status=$1
+	if [ $exit_status -ne 0 ]; then
+		echo "mount command exited with non zero exit status code. Exiting..."
+		exit
+	else
+		echo "mount was successful."
+	fi
+}
+
+# Mount the dns name to the given mounting point
+# script will not create mounting point but take as arguement
+# Script will take dns name as arguements and must be given with the root directory path
+mount_it(){
+	echo "wsize and rsize will be set to 1MB."
+	mount -t nfs4 -o nfsvers=4.1,rsize=1000000,wsize=10000,hard,timeo=600,retrans=2,noresvport "$dns_name_with_root_directory_path" "$mounting_point"
+	# this function checks if the previous command exited with 0 exit status code
+	# we don't have this function yet, we will write it later
+	check_exit_status "$?"
+}
+
+# detecting the distro of this operating system
+echo "Updating distro: $distro"
+detect_distro
+echo "$distro"
+
+# Updating the detected system
+update_it
+
+# Install nfs client based on detected distribution
+install_nfs_client
+
+# mount it 
+mount_it  

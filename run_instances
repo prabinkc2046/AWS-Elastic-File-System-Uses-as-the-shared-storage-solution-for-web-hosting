@@ -1,0 +1,9 @@
+# Create an EC2 key pair named 'mykeypair' and save the private key to a file named 'mykeypair.pem'.
+aws ec2 create-key-pair --key-name mykeypair --query "KeyMaterial" --output text > mykeypair.pem
+sudo chmod 400 mykeypair.pem
+
+# Launch an EC2 instance (webserver1) with specific configurations, including security group, key pair, tags, and subnet.
+aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro --security-group-ids $group_id --associate-public-ip-address --key-name mykeypair --tag-specifications 'ResourceType=instance,Tags=[{Key=name,Value=webserver1}]' --subnet-id $(aws ec2 describe-subnets --filters "Name=tag:name,Values=publicsn1" --query Subnets[0].SubnetId --output text) --count 1
+
+# Launch another EC2 instance (webserver2) with similar configurations but a different name tag.
+aws ec2 run-instances --image-id ami-0361bbf2b99f46c1d --instance-type t2.micro --security-group-ids $group_id --associate-public-ip-address --key-name mykeypair --tag-specifications 'ResourceType=instance,Tags=[{Key=name,Value=webserver2}]' --subnet-id $(aws ec2 describe-subnets --filters "Name=tag:name,Values=publicsn1" --query Subnets[0].SubnetId --output text) --count 1

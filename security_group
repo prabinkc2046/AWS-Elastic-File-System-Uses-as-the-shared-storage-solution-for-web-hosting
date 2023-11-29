@@ -1,0 +1,18 @@
+# Print the VPC ID stored in the variable vpc_id.
+echo $vpc_id
+
+# Create a security group named 'mysecuritygroup' with a specific description, allowing HTTP from any IP, SSH from your IP, and NFS from the same security group.
+aws ec2 create-security-group --group-name mysecuritygroup --description "allows http from any and ssh from my ip as well as allow nfs from this security group" --vpc-id $vpc_id
+
+# Retrieve the ID of the created security group and print it.
+group_id=$(aws ec2 describe-security-groups --region ap-southeast-2 --query SecurityGroups[*].[GroupId,GroupName] --output text | grep -i mysecuritygroup | awk '{print $1}')
+echo $group_id
+
+# Authorize ingress rules for the created security group: HTTP from any IP, SSH from your current IP, and NFS from the same security group.
+aws ec2 authorize-security-group-ingress --group-id $group_id --protocol tcp --port 80 --cidr 0.0.0.0/0
+my_ip=$(curl ipinfo.io/ip)
+aws ec2 authorize-security-group-ingress --group-id $group_id --protocol tcp --port 22 --cidr "$my_ip/32"
+aws ec2 authorize-security-group-ingress --group-id $group_id --protocol tcp --port 2049 --source-group $group_id
+
+# Describe the details of the created security group.
+aws ec2 describe-security-groups --group-ids $group_id

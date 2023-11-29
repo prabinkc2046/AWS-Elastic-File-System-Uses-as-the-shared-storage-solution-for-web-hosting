@@ -1,0 +1,2 @@
+# Copy files from the local 'code' directory to the remote EC2 instance at the specified path.
+scp -i mykeypair.pem code/* ec2-user@13.211.122.187:/mnt/share

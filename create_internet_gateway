@@ -1,0 +1,10 @@
+# Create an internet gateway in the ap-southeast-2 region and store the resulting ID in the variable internet_gateway_id.
+internet_gateway_id=igw-01bdadc8a47591f14
+echo igw-09a1c97a1e97d1631
+
+# Print the VPC ID stored in the variable vpc_id.
+echo vpc-03563314f821becda
+
+# Attach the created internet gateway to the specified VPC (vpc-03563314f821becda).
+aws ec2 attach-internet-gateway --internet-gateway-id igw-09a1c97a1e97d1631 --vpc-id vpc-03563314f821becda
+

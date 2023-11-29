@@ -1,0 +1,15 @@
+# Create an Amazon EFS file system with specific configurations, including encryption, performance mode, and tags.
+aws efs create-file-system --backup --creation-token myefs --encrypted --performance-mode generalPurpose --region ap-southeast-2 --throughput-mode elastic --tags Key=name,Value=myefs
+
+# Retrieve the ID of the created EFS file system and print it.
+file_system_id=$(aws efs describe-file-systems --region ap-southeast-2 --query 'FileSystems[*].[FileSystemId]' --output text)
+echo $file_system_id
+
+# Print the security group ID, and subnets.
+echo $group_id
+echo $subnets
+
+# Iterate through each subnet and create an EFS mount target using the specified security group and file system ID.
+for subnet in ${subnets[@]}; do 
+    aws efs create-mount-target --security-groups $group_id --file-system-id $file_system_id --subnet-id $subnet
+done

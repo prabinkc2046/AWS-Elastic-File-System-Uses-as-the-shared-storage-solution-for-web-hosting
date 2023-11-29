@@ -1,0 +1,11 @@
+# Create a route table in the specified VPC (vpc-03563314f821becda) and store the resulting ID in the variable route_table_id.
+route_table_id=
+echo rtb-0aa4d8123f119f69c
+
+# Print the internet gateway ID and the route table ID.
+echo igw-09a1c97a1e97d1631
+echo rtb-0aa4d8123f119f69c
+
+# Create a default route in the route table, directing traffic to the internet via the specified internet gateway.
+aws ec2 create-route --destination-cidr-block 0.0.0.0/0 --gateway-id igw-09a1c97a1e97d1631 --route-table-id rtb-0aa4d8123f119f69c
+

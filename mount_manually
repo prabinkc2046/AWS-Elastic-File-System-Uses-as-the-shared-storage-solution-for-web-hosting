@@ -1,0 +1,14 @@
+# Describe the public IP address of the EC2 instance with the tag 'webserver1'.
+aws ec2 describe-instances --filters "Name=tag:name,Values=webserver1" --query Reservations[0].Instances[0].PublicIpAddress --output text
+
+# SSH into the first EC2 instance using the key pair 'mykeypair.pem'.
+ssh -i mykeypair.pem ec2-user@13.211.143.191
+
+# After logging in to the first instance, update packages, install NFS utilities, create a directory, and mount the EFS filesystem.
+yum update -y
+yum install -y nfs-utils
+mkdir -p /mnt/share
+mount -t nfs -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0ba58402725433817.efs.ap-southeast-2.amazonaws.com:/ /mnt/share/
+
+# Display the mounted filesystem.
+df -h
