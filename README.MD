@@ -171,18 +171,18 @@ df -h
 ```
 [link](./aws-commands-used/mount_manually)
 
-[Watch Demo]()
+[Watch Demo](https://youtu.be/ctsWv6EWU2g)
 
 ## Script Writing that will automate mounting processs
 [link](./nfs_configurator)
 
-[Watch Demo Video](youtube video link)
+[Watch Demo Video](https://youtu.be/aUpS-GPwVpI)
 
 ## Mounting  with Script
-[Watch Demo Video](youtube video link)
+[Watch Demo Video](https://youtu.be/J8L8vxBC708)
 
-## Configure Web Server
-[Watch Demo Video](youtube video link)
+## Configure Nginx to serve static files
+[Watch Demo Video](https://youtu.be/odQANuBOn38)
 
 ## Magic of Elastic File System
-[Watch Demo Video](youtube video link)
+[Watch Demo Video]()
