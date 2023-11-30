@@ -15,7 +15,7 @@ aws ec2 modify-vpc-attribute --vpc-id $vpc_id --enable-dns-hostnames
 # Enable DNS hostnames for the created VPC using modify-vpc-attribute.
 aws ec2 modify-vpc-attribute --vpc-id vpc-03563314f821becda --enable-dns-hostnames
 ```
-[Link](./aws-commands-used/create_vpc)
+[link](./aws-commands-used/create_vpc)
 
 [Watch Demo](https://youtu.be/lE_TtPICQZQ)
 
