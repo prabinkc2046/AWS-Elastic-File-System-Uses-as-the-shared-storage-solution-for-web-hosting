@@ -185,4 +185,4 @@ df -h
 [Watch Demo Video](https://youtu.be/odQANuBOn38)
 
 ## Magic of Elastic File System
-[Watch Demo Video]()
+[Watch Demo](https://youtu.be/5lXg_nrohjo)
